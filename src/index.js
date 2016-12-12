@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = () => {
   // Bind config
   var module = {};
   module.getConfig = (projectId) => {
