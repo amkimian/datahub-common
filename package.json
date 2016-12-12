@@ -1,0 +1,15 @@
+{
+  "name": "datahub-common",
+  "description": "DataHub Common Code, shared between modules",
+  "version": "0.0.2",
+  "private": true,
+  "author": "Incapture",
+  "engines": {
+    "node": ">=7.0.0"
+  },
+  "main": "src/index.js",
+  "dependencies": {
+    "async": "^2.0.1",
+    "google-cloud": "^0.44.2"
+  }
+}
