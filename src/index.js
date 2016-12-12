@@ -16,19 +16,19 @@ module.exports = () => {
   };
 
   module.dataset = (projectId) => {
-    return require('/data/dataset.js')(module.getConfig(projectId));
+    return require('./data/dataset.js')(module.getConfig(projectId));
   };
 
   module.repo = (projectId) => {
-    return require('/data/repo.js')(module.getConfig(projectId));
+    return require('./data/repo.js')(module.getConfig(projectId));
   }
 
   module.subscription = (projectId) => {
-    return require('/data/subscription.js')(module.getConfig(projectId));
+    return require('./data/subscription.js')(module.getConfig(projectId));
   };
 
   module.user = (projectId) => {
-    return require('/data/user.js')(module.getConfig(projectId));
+    return require('./data/user.js')(module.getConfig(projectId));
   };
 
   return module;
