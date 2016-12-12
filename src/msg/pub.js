@@ -3,6 +3,7 @@ module.exports = (config) => {
 
   const gcloud = require('google-cloud');
   const pubsub = gcloud.pubsub(config);
+  const async = require('async');
   var topicMap = {
     eventUpdate : {
     }
