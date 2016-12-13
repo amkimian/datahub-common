@@ -14,6 +14,18 @@ module.exports = (config) => {
     ds.runQuery(query, cb);
   }
 
+  module.getBindings = (cb) => {
+    var query = ds.createQuery('Binding');
+    ds.runQuery(query, cb);
+  }
+
+  module.createBinding = (binding, cb) => {
+    ds.save({
+      key: ds.key(['Binding']),
+      data: binding
+    }, cb);
+  }
+
   module.createProgram = (program, cb) => {
     var query = ds.createQuery('Program');
     query.filter('id', program.id);
