@@ -5,6 +5,11 @@ module.exports = (config) => {
 
   console.log("datahub-common, program, Config was " + JSON.stringify(config));
 
+  module.getPrograms = (cb) => {
+    var query = ds.createQuery('Program');
+    ds.runQuery(query, cb);
+  }
+
   module.createProgram = (program, cb) => {
     var query = ds.createQuery('Program');
     query.filter('id', program.id);
