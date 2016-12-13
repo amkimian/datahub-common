@@ -31,5 +31,9 @@ module.exports = () => {
     return require('./data/user.js')(module.getConfig(projectId));
   };
 
+  module.program = (projectId) => {
+    return require('./data/program.js')(module.getConfig(projectId));
+  };
+
   return module;
 }
