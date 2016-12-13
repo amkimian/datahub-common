@@ -35,5 +35,9 @@ module.exports = () => {
     return require('./data/program.js')(module.getConfig(projectId));
   };
 
+  module.pub = (projectId) => {
+    return require('./msg/pub.js')(module.getConfig(projectId));
+  }
+
   return module;
 }
