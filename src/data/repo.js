@@ -29,12 +29,12 @@ module.exports = (config) => {
   };
 
   module.createRepository = (repo, cb) => {
-      exports.getRepositoryByCode(repo.repocode, (err, r) => {
+      module.getRepositoryByCode(repo.repocode, (err, r) => {
           if (err) { return cb(err); }
           if (r != null) {
             return cb('Already exists');
           } else {
-            exports.updateRepository(repo, cb);
+            module.updateRepository(repo, cb);
           }
       });
   };

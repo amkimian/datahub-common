@@ -73,7 +73,7 @@ module.exports = (config) => {
 
   module.queryTable = (datasetId, tableName, whereClause, cb) => {
   // SELECT * FROM [datahub-151621:amxtestxbq.test] LIMIT 1000
-    exports.getDataSet(datasetId, (err, dataset) => {
+    module.getDataSet(datasetId, (err, dataset) => {
       var bqowner = process.env.GCLOUD_PROJECTID;
       console.log(JSON.stringify(dataset));
       if (dataset.bqowner) {
@@ -89,7 +89,7 @@ module.exports = (config) => {
   }
 
   module.postTableData = (datasetId, tableName, data, cb) => {
-    exports.getDataSet(datasetId, (err, dataset) => {
+    module.getDataSet(datasetId, (err, dataset) => {
       var bqds = bq.dataset(dataset.bq);
       var table = bqds.table(tableName);
       table.get((err, table) => {
