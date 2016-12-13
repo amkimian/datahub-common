@@ -5,7 +5,7 @@ module.exports = (config) => {
 
   console.log("datahub-common, program, Config was " + JSON.stringify(config));
 
-  module.getProgram = (id, c) => {
+  module.getProgram = (id, cb) => {
       ds.get(ds.key(['Program', id]), cb);
   }
 
