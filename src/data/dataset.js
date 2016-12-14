@@ -28,6 +28,7 @@ module.exports = (config) => {
         return cb(err);
       }
       var bucket = storage.bucket(dataset.bucket);
+      console.log("ID OF FILE IS " + id);
       var file = bucket.file(id);
       file.getMetadata((err, metadata) => {
         file.download((err, contents) => {
