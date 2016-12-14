@@ -115,7 +115,7 @@ module.exports = (config) => {
     });
   }
 
-  module.writeTableData = (datasetName, tableName, data, cb) => {
+  module.writeTableData = (datasetId, tableName, data, cb) => {
     module.getDataSet(datasetId, (err, dataset) => {
       if (err) { return cb(err); }
       var bqds = bq.dataset(dataset.bq);
@@ -131,9 +131,12 @@ module.exports = (config) => {
     });
   };
 
-  module.createTable = (datasetName, tableName, tableSchema, cb) => {
-    var bqds = bq.dataset(datasetName);
-    bqds.createTable(tableName, { schema: tableSchema }, cb);
+  module.createTable = (datasetId, tableName, tableSchema, cb) => {
+    module.getDataSet(datasetId, (err, dataset) => {
+      if (err) { return cb(err); }
+      var bqds = bq.dataset(dataset.bq);
+      bqds.createTable(tableName, { schema: tableSchema }, cb);
+    });
   };
 
   module.createDataSet = (dataset, cb) => {
