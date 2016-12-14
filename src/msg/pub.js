@@ -27,7 +27,7 @@ module.exports = (config) => {
 
   bindTopics();
 
-  module.eventUpdate = (owner, repo, dataset, element, elementType, change, cb) => {
+  module.eventUpdate = (owner, repo, dataset, element, elementType, change, content, cb) => {
     // Publish update
     var event = {
       owner: owner,
@@ -36,6 +36,7 @@ module.exports = (config) => {
       element: element,
       elementType: elementType,
       change: change,
+      content: content,
       when: new Date()
     };
     topicMap.eventUpdate.topic.publish(event, cb);

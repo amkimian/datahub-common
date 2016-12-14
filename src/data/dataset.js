@@ -130,7 +130,15 @@ module.exports = (config) => {
           // Here we would also publish an event update...
           console.log("Data is " + data.length + " rows");
           console.log("Sample is " + JSON.stringify(data[0], null, '\t'));
-          table.insert(data, cb);
+          table.insert(data, (err) => {
+            if (err) { return cb(err); }
+            // else do some pubbing
+            async.each(data, (elem, cb) => {
+              pub.eventUpdate("sys", "", elem.srcDataSet, elem.srcElement, "row", 'create', elem, cb);
+            }, (err) => {
+              cb(err);
+            });
+          });
         }
       });
     });
@@ -166,7 +174,7 @@ module.exports = (config) => {
           if (err) {
             cb(err);
           } else {
-            pub.eventUpdate(dataset.owner, dataset.repocode, dataset.id, undefined, undefined, 'create', (err) => {
+            pub.eventUpdate(dataset.owner, dataset.repocode, dataset.id, undefined, undefined, 'create', '', (err) => {
               if (err) {
                 cb(err);
               } else {
