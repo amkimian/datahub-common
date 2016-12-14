@@ -128,6 +128,8 @@ module.exports = (config) => {
           return cb(err);
         } else {
           // Here we would also publish an event update...
+          console.log("Data is " + data.length + " rows");
+          console.log("Sample is " + JSON.stringify(data[0], null, '\t'));
           table.insert(data, cb);
         }
       });
