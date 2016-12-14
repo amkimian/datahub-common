@@ -115,6 +115,22 @@ module.exports = (config) => {
     });
   }
 
+  module.writeTableData = (datasetName, tableName, data, cb) => {
+    module.getDataSet(datasetId, (err, dataset) => {
+      if (err) { return cb(err); }
+      var bqds = bq.dataset(dataset.bq);
+      var table = bqds.table(tableName);
+      table.get((err, table) => {
+        if (err) {
+          return cb(err);
+        } else {
+          // Here we would also publish an event update...
+          table.insert(data, cb);
+        }
+      });
+    });
+  };
+
   module.createTable = (datasetName, tableName, tableSchema, cb) => {
     var bqds = bq.dataset(datasetName);
     bqds.createTable(tableName, { schema: tableSchema }, cb);
