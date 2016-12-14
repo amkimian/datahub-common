@@ -136,7 +136,7 @@ module.exports = (config) => {
             if (err) { return cb(err); }
             // else do some pubbing
             async.each(data, (elem, cb) => {
-              pub.eventUpdate("sys", "", elem.srcDataSet, elem.srcElement, "row", 'create', elem, cb);
+              pub.eventUpdate("sys", "", datasetId, tableName, "row", 'create', elem, cb);
             }, (err) => {
               cb(err);
             });
