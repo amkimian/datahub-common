@@ -1,3 +1,5 @@
+const async = require('async');
+
 module.exports = (config) => {
   var module = {};
   const gcloud = require('google-cloud');
