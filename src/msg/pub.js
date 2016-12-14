@@ -41,5 +41,12 @@ module.exports = (config) => {
     topicMap.eventUpdate.topic.publish(event, cb);
   };
 
+  module.publishMessage = (topic, message, cb) => {
+    var t = pubsub.topic(topic);
+    t.get({ autoCreate: true}, (err, top) => {
+      top.publish(message, cb);
+    });
+  };
+
   return module;
 }
