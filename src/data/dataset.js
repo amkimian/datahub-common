@@ -66,11 +66,14 @@ module.exports = (config) => {
     bqds.getTables(cb);
   }
 
-  module.getTable = (datasetName, tableName, cb) => {
-    var bqds = bq.dataset(datasetName);
-    var table = bqds.table(tableName);
-    table.get(cb);
+  module.getTable = (datasetId, tableName, cb) => {
+    module.getDataSet(datasetId, (err, dataset) => {
+      var bqds = bq.dataset(dataset.bq);
+      var table = bqds.table(tableName);
+      table.get(cb);
+    });
   }
+
 
   module.queryTable = (datasetId, tableName, whereClause, cb) => {
   // SELECT * FROM [datahub-151621:amxtestxbq.test] LIMIT 1000
