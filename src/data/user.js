@@ -2,16 +2,17 @@ module.exports = (config) => {
   var module = {};
   const gcloud = require('google-cloud');
   const ds = gcloud.datastore(config);
+  const User = 'User';
 // Code to manage users (usually on gcloud)
 
     module.getUserByKey = (key, cb) => {
-        ds.get(ds.key(['User', key]), (err, user) => {
+        ds.get(ds.key([User, key]), (err, user) => {
           cb(err, user);
         });
     }
 
     module.getUserById = (id, cb) => {
-      var query = ds.createQuery('User');
+      var query = ds.createQuery(User);
       query.filter('id', id);
       ds.runQuery(query, (err, users) => {
         if (err) { return cb(err); }
@@ -31,7 +32,7 @@ module.exports = (config) => {
     }
 
     module.getUserByEmail = (email, cb) => {
-      var query = ds.createQuery('User');
+      var query = ds.createQuery(User);
       query.filter('email', email);
       ds.runQuery(query, (err, users) => {
         if (err) { return cb(err); }
@@ -51,7 +52,7 @@ module.exports = (config) => {
     }
 
     module.getUserByTag = (tagName, tagValue, cb) => {
-      var query = ds.createQuery('User');
+      var query = ds.createQuery(User);
       query.filter(tagName, tagValue);
       ds.runQuery(query, (err, users) => {
         if (err) { return cb(err); }
@@ -72,7 +73,7 @@ module.exports = (config) => {
 
     module.saveUser = (id, user, cb) => {
       ds.save( {
-        key: ds.key(['User', id]),
+        key: ds.key([User, id]),
         data: user
       }, (err) => {
         cb(err);
@@ -80,7 +81,7 @@ module.exports = (config) => {
     }
 
     module.checkCodeFree = (code, cb) => {
-      var query = ds.createQuery('User');
+      var query = ds.createQuery(User);
       query.filter('code', code);
       ds.runQuery(query, (err, users) => {
         cb(err, users.length == 0);

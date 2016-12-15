@@ -2,32 +2,32 @@ module.exports = (config) => {
   var module = {};
   const gcloud = require('google-cloud');
   const ds = gcloud.datastore(config);
-
-  console.log("datahub-common, program, Config was " + JSON.stringify(config));
+  const Program = 'Program';
+  const Binding = 'Binding';
 
   module.getProgram = (id, cb) => {
-      ds.get(ds.key(['Program', id]), cb);
+      ds.get(ds.key([Program, id]), cb);
   }
 
   module.getPrograms = (cb) => {
-    var query = ds.createQuery('Program');
+    var query = ds.createQuery(Program);
     ds.runQuery(query, cb);
   }
 
   module.getBindings = (cb) => {
-    var query = ds.createQuery('Binding');
+    var query = ds.createQuery(Binding);
     ds.runQuery(query, cb);
   }
 
   module.createBinding = (binding, cb) => {
     ds.save({
-      key: ds.key(['Binding']),
+      key: ds.key([Binding]),
       data: binding
     }, cb);
   }
 
   module.createProgram = (program, cb) => {
-    var query = ds.createQuery('Program');
+    var query = ds.createQuery(Program);
     query.filter('id', program.id);
     ds.runQuery(query, (err, programs) => {
       if (err) {
@@ -37,7 +37,7 @@ module.exports = (config) => {
         return cb('Program already exists');
       }
       ds.save({
-        key: ds.key(['Program', program.id]),
+        key: ds.key([Program, program.id]),
         data: program
       }, cb);
     });

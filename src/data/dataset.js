@@ -2,35 +2,40 @@ const async = require('async');
 
 module.exports = (config) => {
   var module = {};
+
   const gcloud = require('google-cloud');
   const ds = gcloud.datastore(config);
   const storage = gcloud.storage(config);
   const bq = gcloud.bigquery(config);
   const pub = require('../msg/pub')(config);
+  const cfg = require('../config');
+  const DataSet = 'DataSet';
 
-  console.log("datahub-common, dataset, Config was " + JSON.stringify(config));
-
+  /**
+   * Retrieve a dataset given its id
+   */
   module.getDataSet = (id, cb) => {
-    ds.get(ds.key(['DataSet', id]), cb);
+    ds.get(ds.key([DataSet, id]), cb);
   }
 
+  /**
+   * Retrieve the storage bucket for a dataset that is a store.
+   */
   module.getBucket = (datasetid, cb) => {
-    ds.get(ds.key(['DataSet', datasetid]), (err, dataset) => {
-      if (err) {
-        return cb(err);
-      }
+    ds.get(ds.key([DataSet, datasetid]), (err, dataset) => {
+      if (err) { return cb(err); }
       var bucket = storage.bucket(dataset.bucket);
       cb(null, bucket);
     });
   }
 
+  /**
+   * Retrieve a file from the store associated with a dataset.
+   */
   module.streamFile = (datasetid, id, cb) => {
-    ds.get(ds.key(['DataSet', datasetid]), (err, dataset) => {
-      if (err) {
-        return cb(err);
-      }
+    ds.get(ds.key([DataSet, datasetid]), (err, dataset) => {
+      if (err) { return cb(err); }
       var bucket = storage.bucket(dataset.bucket);
-      console.log("ID OF FILE IS " + id);
       var file = bucket.file(id);
       file.getMetadata((err, metadata) => {
         file.download((err, contents) => {
@@ -41,18 +46,20 @@ module.exports = (config) => {
           }
         });
       });
-
     });
 
   }
 
+  /**
+   * Retrieve the files associated with a bucket
+   */
   module.getFiles = (bucketName, cb) => {
     var bucket = storage.bucket(bucketName);
     bucket.getFiles(cb);
   }
 
   module.getDataSets = (repocode, cb) => {
-    var query = ds.createQuery('DataSet');
+    var query = ds.createQuery(DataSet);
     query.filter('repocode', repocode);
     ds.runQuery(query, cb);
   }
@@ -60,7 +67,7 @@ module.exports = (config) => {
   module.getTables = (dataset, cb) => {
     var bqds;
     if (dataset.bqowner) {
-      var bqalt = gcloud.bigquery(require('./config').getConfig(dataset.bqowner));
+      var bqalt = gcloud.bigquery(cfg.getConfig(dataset.bqowner));
       bqds = bqalt.dataset(dataset.bq);
     } else {
       bqds = bq.dataset(dataset.bq);
@@ -76,12 +83,10 @@ module.exports = (config) => {
     });
   }
 
-
   module.queryTable = (datasetId, tableName, whereClause, cb) => {
   // SELECT * FROM [datahub-151621:amxtestxbq.test] LIMIT 1000
     module.getDataSet(datasetId, (err, dataset) => {
       var bqowner = process.env.GCLOUD_PROJECTID;
-      console.log(JSON.stringify(dataset));
       if (dataset.bqowner) {
         bqowner = dataset.bqowner;
       }
@@ -129,9 +134,6 @@ module.exports = (config) => {
         if (err) {
           return cb(err);
         } else {
-          // Here we would also publish an event update...
-          console.log("Data is " + data.length + " rows");
-          console.log("Sample is " + JSON.stringify(data[0], null, '\t'));
           table.insert(data, (err) => {
             if (err) { return cb(err); }
             // else do some pubbing
@@ -177,11 +179,7 @@ module.exports = (config) => {
             cb(err);
           } else {
             pub.eventUpdate(dataset.owner, dataset.repocode, dataset.id, undefined, undefined, 'create', '', (err) => {
-              if (err) {
-                cb(err);
-              } else {
-                cb(null);
-              }
+              cb(err);
             });
           }
         });
@@ -198,10 +196,8 @@ module.exports = (config) => {
         });
       } else if (dataset.datasetType == 'bigquery') {
         // Create a dataset on bigquery
-        console.log("Creating big query dataset");
         var datasetName = dataset.id.replace(/[^a-zA-Z0-9]/g,'x').toLowerCase();
         var bqds = bq.createDataset(datasetName, (err, ds) => {
-          console.log("Create Big Query DataSet Error is " + err);
           dataset.bq = datasetName;
           finalSave(dataset, cb);
         });

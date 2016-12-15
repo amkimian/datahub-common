@@ -2,15 +2,16 @@ module.exports = (config) => {
   var module = {};
   const gcloud = require('google-cloud');
   const ds = gcloud.datastore(config);
+  const Repository = 'Repository';
 
   module.getRepositories = (userid, cb) => {
-    var query = ds.createQuery('Repository');
+    var query = ds.createQuery(Repository);
     query.filter('owner', userid);
     ds.runQuery(query, cb);
   };
 
   module.getRepositoryByCode = (repocode, cb) => {
-    var query = ds.createQuery('Repository');
+    var query = ds.createQuery(Repository);
     query.filter('repocode', repocode);
     ds.runQuery(query, (err, repos) => {
       if (err) { return cb(err); }
@@ -51,7 +52,7 @@ module.exports = (config) => {
   };
 
   module.deleteRepository = (repocode, cb) => {
-    ds.delete(ds.key(['Repository', repocode]), (err) => {
+    ds.delete(ds.key([Repository, repocode]), (err) => {
       cb(err);
     })
   };
