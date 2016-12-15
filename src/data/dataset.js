@@ -8,7 +8,7 @@ module.exports = (config) => {
   const storage = gcloud.storage(config);
   const bq = gcloud.bigquery(config);
   const pub = require('../msg/pub')(config);
-  const cfg = require('../config');
+  const cfg = require('./config');
   const DataSet = 'DataSet';
 
   /**
