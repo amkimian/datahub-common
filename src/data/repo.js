@@ -4,9 +4,13 @@ module.exports = (config) => {
   const ds = gcloud.datastore(config);
   const Repository = 'Repository';
 
-  module.getRepositories = (userid, cb) => {
+  module.getRepositories = (userid, pageSize, pageCursor, cb) => {
     var query = ds.createQuery(Repository);
     query.filter('owner', userid);
+    query.limit(pageSize);
+    if (pageCursor) {
+      query.start(pageCursor);
+    }
     ds.runQuery(query, cb);
   };
 
