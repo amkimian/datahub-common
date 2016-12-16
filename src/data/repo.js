@@ -9,9 +9,12 @@ module.exports = (config) => {
     query.filter('owner', userid);
     query.limit(pageSize);
     if (pageCursor) {
+      console.log("Setting starting point for pageCursor " + pageCursor);
       query.start(pageCursor);
     }
-    ds.runQuery(query, cb);
+    ds.runQuery(query, (err, repos, info) => {
+      cb(err, repos, info );
+    });
   };
 
   module.getRepositoryByCode = (repocode, cb) => {
