@@ -8,7 +8,7 @@ module.exports = (config) => {
     var query = ds.createQuery(Repository);
     query.filter('owner', userid);
     query.limit(pageSize);
-    if (pageCursor && pageCursor != undefined) {
+    if (pageCursor && pageCursor != 'undefined') {
       console.log("Setting starting point for pageCursor " + pageCursor);
       query.start(pageCursor);
     }
