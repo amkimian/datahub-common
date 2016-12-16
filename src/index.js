@@ -27,6 +27,9 @@ module.exports = () => {
     return require('./msg/pub.js')(module.config.getConfig(projectId));
   };
 
+  module.event = (projectId) => {
+  	return require('./data/event.js')(module.config.getConfig(projectId));
+  };
 
   return module;
 }
