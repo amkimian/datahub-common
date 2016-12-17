@@ -12,7 +12,7 @@ module.exports = (config) => {
       query.start(pageCursor);
     }
     ds.runQuery(query, (err, events, info) => {
-      cb(err, event, info );
+      cb(err, events, info );
     });
   };
 
