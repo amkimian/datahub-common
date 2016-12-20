@@ -47,7 +47,7 @@ module.exports = (config) => {
 	module.getUserOrgs = (user, pageSize, pageCursor, cb) => {
 		var query = ds.createQuery(OrgMember);
 		query.filter('user', user);
-		query.groupBy('orgcode');
+		//	query.groupBy('orgcode');
 		query.limit(pageSize);
 		if (pageCursor && pageCursor != 'undefined') {
 			console.log("Setting starting point for pageCursor " + pageCursor);
