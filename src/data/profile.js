@@ -20,5 +20,12 @@ module.exports = (config) => {
 		});
 	};
 
+	module.putProfile = (code, profile, cb) => {
+		ds.save({
+			key: ds.key([Profile, code]),
+			data: profile
+		}, cb);
+	};
+
 	return module;
 };
