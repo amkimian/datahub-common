@@ -35,5 +35,9 @@ module.exports = () => {
 		return require('./data/org.js')(module.config.getConfig(projectId));
 	};
 
+	module.profile = (projectId) => {
+		return require('./data/profile.js')(module.config.getConfig(projectId));
+	}
+
 	return module;
 }
