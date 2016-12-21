@@ -58,9 +58,16 @@ module.exports = (config) => {
 	/**
 	 * Retrieve the files associated with a bucket
 	 */
-	module.getFiles = (bucketName, cb) => {
+	module.getFiles = (bucketName, limit, pageToken, cb) => {
+		var query = {
+			autopaginate: false,
+			maxResults: limit
+		};
+		if (pageToken) {
+			query.pageToken = pageToken;
+		}
 		var bucket = storage.bucket(bucketName);
-		bucket.getFiles(cb);
+		bucket.getFiles(query, cb);
 	}
 
 	module.getDataSets = (repocode, cb) => {
