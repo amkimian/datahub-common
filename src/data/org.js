@@ -60,10 +60,12 @@ module.exports = (config) => {
 		var query = ds.createQuery(OrgMember);
 		query.filter('user', user);
 		query.filter('orgcode', org);
+		console.log("Running canEdit query");
 		ds.runQuery(query, (err, members) => {
 			if (err) {
 				return cb(err);
 			}
+			console.log("Got members - " + JSON.stringify(members));
 			for (var i = 0; i < members.length; i++) {
 				if (members[i].role == 'owner' || members[i].role == 'editor') {
 					return cb(null, true);
