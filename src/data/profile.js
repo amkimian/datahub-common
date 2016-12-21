@@ -7,7 +7,17 @@ module.exports = (config) => {
 	module.getProfile = (code, cb) => {
 		var query = ds.createQuery(Profile);
 		query.filter('code', code);
-		ds.runQuery(query, cb);
+		ds.runQuery(query, (err, profiles) => {
+			if (err) {
+				return cb(err);
+			}
+			if (profiles.length == 0) {
+				return cb(null, null);
+			}
+			else {
+				return cb(null, profiles[0]);
+			}
+		});
 	};
 
 	return module;
