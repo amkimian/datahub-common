@@ -5,11 +5,16 @@ module.exports = (config) => {
 	const ds = gcloud.datastore(config);
 	const Repository = 'Repository';
 	const Profile = 'Profile';
-	module.getMarketRepos = (cb) => {
+	module.getMarketRepos = (pageSize, pageCursor, cb) => {
 		// Retrieve repos that are eligible for the marketplace
 		// Then enrich those repos with owner hashicon information
 		var query = ds.createQuery(Repository);
-		ds.runQuery(query, (err, repos) => {
+		query.limit(pageSize);
+		if (pageCursor && pageCursor != 'undefined') {
+			query.start(pageCursor);
+		}
+
+		ds.runQuery(query, (err, repos, info) => {
 			if (err) {
 				return cb(err);
 			}
@@ -21,13 +26,14 @@ module.exports = (config) => {
 				}
 				else {
 					var query = ds.createQuery(Profile);
-					query.filter('code', entry.code);
+					console.log("Entry code is " + entry.owner);
+					query.filter('code', entry.owner);
 					ds.runQuery(query, (err, profiles) => {
 						if (err) {
 							cb(err);
 						}
 						else {
-							var hashicon = "1234";
+							var hashicon = "9a38a7f9e62c60e17071a94f199b24ee";
 							if (profiles.length > 0) {
 								hashicon = profiles[0].iconhash;
 							}
@@ -38,7 +44,7 @@ module.exports = (config) => {
 					});
 				}
 			}, (err, result) => {
-				cb(err, result);
+				cb(err, result, info);
 			});
 		});
 	};
