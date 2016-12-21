@@ -56,5 +56,22 @@ module.exports = (config) => {
 		ds.runQuery(query, cb);
 	}
 
+	module.canEdit = (user, org, cb) => {
+		var query = ds.createQuery(OrgMember);
+		query.filter('user', user);
+		query.filter('orgcode', org);
+		ds.runQuery(query, (err, members) => {
+			if (err) {
+				return cb(err);
+			}
+			for (var i = 0; i < members.length; i++) {
+				if (members[i].role == 'owner' || members[i].role == 'editor') {
+					return cb(null, true);
+				}
+			}
+			return cb(null, false);
+		});
+	}
+
 	return module;
 }
