@@ -37,7 +37,11 @@ module.exports = () => {
 
 	module.profile = (projectId) => {
 		return require('./data/profile.js')(module.config.getConfig(projectId));
-	}
+	};
+
+	module.market = (projectId) => {
+		return require('./data/market.js')(module.config.getConfig(projectId));
+	};
 
 	return module;
 }
