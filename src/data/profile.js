@@ -25,7 +25,8 @@ module.exports = (config) => {
 			key: ds.key([Profile, code]),
 			data: profile
 		}, cb);
+		return module;
 	};
 
 	return module;
-};
+}
